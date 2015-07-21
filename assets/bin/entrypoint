@@ -24,14 +24,13 @@ else
   export HOME=/home/developer
   
   # set java version
-  if [ ! -z "$JAVA_VER" ]
+  if [ -z "$JAVA_VER" ]
   then
-      JAVA_VER=$(ls /assets/java-sdk | tail -n1)
+      JAVA_VER=$(ls /assets/java-sdks | tail -n1)
   fi
-  export JAVA_HOME=/assets/java-jdks/$JAVA_VER
+  export JAVA_HOME=/assets/java-sdks/$JAVA_VER
   ln -s $JAVA_HOME/bin/* /usr/local/bin/
-  update-alternatives --install java /usr/local/bin/java java 1
-  ln -s $JAVA_HOME/jre/lib/amd64/libnpjp2.so /usr/lib/mozilla/plugins
+  ln -s $JAVA_HOME/jre/lib/amd64/libnpjp2.so /usr/lib/firefox/browser/plugins/
   
   rm -rf $HOME/.mozilla
   mkdir $HOME/.mozilla
@@ -39,6 +38,7 @@ else
   then
     FF_PROFILE=/assets/default-firefox-profile
     test -d $FF_PROFILE || mkdir -p $FF_PROFILE
+    chown -R developer: $FF_PROFILE
   fi
   
   ln -s $FF_PROFILE $HOME/.mozilla/firefox
