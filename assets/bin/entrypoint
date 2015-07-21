@@ -1,0 +1,47 @@
+#!/bin/bash
+set -x
+
+# container args
+ARGS="$@"
+
+if [ ! -z "$DEVEL" ]
+then
+  case "$ARGS" in
+  check) check_funtion; $ARGS;;
+  /bin/bash) /bin/bash --login;;
+  *) if [ ! -z "$ARGS" ]; then $ARGS; else /bin/bash --login; fi;;
+  esac
+else
+
+  # set an unprivileged user using the host UID to avoid messing with perms
+  export uid=$HOST_UID gid=$HOST_GID
+  mkdir -p /home/developer
+  echo "developer:x:${uid}:${gid}:Developer,,,:/home/developer:/bin/bash" >> /etc/passwd
+  echo "developer:x:${uid}:" >> /etc/group
+  echo "developer ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/developer
+  chmod 0440 /etc/sudoers.d/developer
+  chown ${uid}:${gid} -R /home/developer
+  export HOME=/home/developer
+  
+  # set java version
+  if [ ! -z "$JAVA_VER" ]
+  then
+      JAVA_VER=$(ls /assets/java-sdk | tail -n1)
+  fi
+  export JAVA_HOME=/assets/java-jdks/$JAVA_VER
+  ln -s $JAVA_HOME/bin/* /usr/local/bin/
+  update-alternatives --install java /usr/local/bin/java java 1
+  ln -s $JAVA_HOME/jre/lib/amd64/libnpjp2.so /usr/lib/mozilla/plugins
+  
+  rm -rf $HOME/.mozilla
+  mkdir $HOME/.mozilla
+  if [ -z "$FF_PROFILE" ]
+  then
+    FF_PROFILE=/assets/default-firefox-profile
+    test -d $FF_PROFILE || mkdir -p $FF_PROFILE
+  fi
+  
+  ln -s $FF_PROFILE $HOME/.mozilla/firefox
+  
+  sudo -u developer /usr/bin/firefox
+fi

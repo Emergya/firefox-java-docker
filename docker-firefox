@@ -1,0 +1,21 @@
+#!/bin/bash
+set -x
+
+PROJECT_DIR=$(dirname $(readlink -f $0))
+
+if [ ! -z "$1" ]
+then
+  FF_PROFILE="$(dirname $(dirname $(readlink -f $1)))"
+  FF_PROFILE_VOLUME="-v $FF_PROFILE:$FF_PROFILE"
+fi
+
+xhost +local
+docker run -it --rm \
+  -e DISPLAY=$DISPLAY \
+  -e HOST_UID=$(id -u) \
+  -e HOST_GID=$(id -g) \
+  -e FF_PROFILE=$FF_PROFILE \
+  $FF_PROFILE_VOLUME \
+  -v $PROJECT_DIR/assets:/assets \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  emergya-firefox-java-docker
