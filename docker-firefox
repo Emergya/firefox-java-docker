@@ -16,6 +16,7 @@ docker run -it --rm \
   -e HOST_GID=$(id -g) \
   -e FF_PROFILE=$FF_PROFILE \
   $FF_PROFILE_VOLUME \
+  -v /dev/bus/usb:/dev/bus/usb \
   -v $PROJECT_DIR/assets:/assets \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   emergya-firefox-java-docker $@
