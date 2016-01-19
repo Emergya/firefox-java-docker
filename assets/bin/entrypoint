@@ -43,5 +43,5 @@ else
   
   ln -s $FF_PROFILE $HOME/.mozilla/firefox
   
-  sudo -u developer /usr/bin/firefox
+  sudo -u developer /usr/bin/firefox $ARGS
 fi
