@@ -18,4 +18,4 @@ docker run -it --rm \
   $FF_PROFILE_VOLUME \
   -v $PROJECT_DIR/assets:/assets \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
-  emergya-firefox-java-docker
+  emergya-firefox-java-docker $@
