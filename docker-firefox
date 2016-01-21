@@ -19,4 +19,4 @@ docker run -it --rm \
   -v /dev/bus/usb:/dev/bus/usb \
   -v $PROJECT_DIR/assets:/assets \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
-  emergya-firefox-java-docker $@
+  emergya/firefox-java-docker $@

@@ -30,7 +30,13 @@ else
   fi
   export JAVA_HOME=/assets/java-sdks/$JAVA_VER
   ln -s $JAVA_HOME/bin/* /usr/local/bin/
-  ln -s $JAVA_HOME/jre/lib/amd64/libnpjp2.so /usr/lib/firefox/browser/plugins/
+
+  if [ ! -e "$JAVA_HOME/jre/lib/amd64/libnpjp2.so" ]
+  then
+    ln -s $JAVA_HOME/jre/lib/i386/libnpjp2.so /usr/lib/firefox/browser/plugins/
+  else
+    ln -s $JAVA_HOME/jre/lib/amd64/libnpjp2.so /usr/lib/firefox/browser/plugins/
+  fi
   
   rm -rf $HOME/.mozilla
   mkdir $HOME/.mozilla
